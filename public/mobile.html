@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>颜色捕捉游戏 - 手机端</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="js/sounds.js"></script>
+    <script src="js/camera.js"></script>
+    <style>
+        .mobile-container {
+            padding: 20px;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .camera-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        #camera-preview {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .target-color-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        #target-color {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+            margin-left: 10px;
+        }
+        
+        .status-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        #camera-status {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        #game-status {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        #capture-photo {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        #capture-photo:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        #capture-photo:not(:disabled):hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <h1>大家一起找颜色（手机端）</h1>
+        
+        <div class="target-color-container">
+            <span>目标颜色:</span>
+            <div id="target-color"></div>
+        </div>
+        
+        <div class="camera-container">
+            <div id="camera-preview"></div>
+        </div>
+        
+        <div class="status-container">
+            <div id="camera-status">正在初始化摄像头...</div>
+            <div id="game-status">等待游戏开始</div>
+        </div>
+        
+        <button id="capture-photo" disabled>拍照</button>
+    </div>
+</body>
+</html> 
