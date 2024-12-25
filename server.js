@@ -25,14 +25,42 @@ let mobileSocket = null;
 io.on('connection', (socket) => {
     console.log('新客户端连接:', socket.id);
 
+    // 根据页面URL判断是桌面端还是手机端
+    const referer = socket.handshake.headers.referer || '';
+    console.log('客户端来源URL:', referer);
+
+    if (referer.includes('mobile.html')) {
+        console.log('手机端连接:', socket.id);
+        mobileSocket = socket;
+        // 如果桌面端已连接，立即通知桌面端
+        if (desktopSocket) {
+            console.log('通知桌面端手机已连接');
+            desktopSocket.emit('mobile-connected');
+        }
+    } else if (referer.includes('index.html') || !referer.includes('.html')) {
+        console.log('桌面端连接:', socket.id);
+        desktopSocket = socket;
+        // 如果手机端已连接，立即通知桌面端
+        if (mobileSocket && mobileSocket.connected) {
+            console.log('通知桌面端手机已连接');
+            socket.emit('mobile-connected');
+        }
+    } else {
+        console.log('未知客户端类型:', socket.id, '来自:', referer);
+    }
+
     // 监听手机端就绪事件
     socket.on('mobile-ready', () => {
         console.log('手机端已就绪:', socket.id);
-        mobileSocket = socket;
-        
-        // 如果桌面端已连接，通知桌面端手机已就绪
-        if (desktopSocket) {
-            desktopSocket.emit('mobile-connected');
+        // 确保这是手机端
+        if (referer.includes('mobile.html')) {
+            // 通知桌面端手机已就绪
+            if (desktopSocket) {
+                console.log('通知桌面端手机已就绪');
+                desktopSocket.emit('mobile-connected');
+            }
+        } else {
+            console.log('收到非手机端的mobile-ready事件:', socket.id);
         }
     });
 
@@ -80,28 +108,18 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('客户端断开连接:', socket.id);
         if (socket === mobileSocket) {
+            console.log('手机端断开连接');
             mobileSocket = null;
             if (desktopSocket) {
                 desktopSocket.emit('mobile-disconnected');
             }
         } else if (socket === desktopSocket) {
+            console.log('桌面端断开连接');
             desktopSocket = null;
+        } else {
+            console.log('未知客户端断开连接');
         }
     });
-
-    // 根据页面URL判断是桌面端还是手机端
-    const referer = socket.handshake.headers.referer || '';
-    if (referer.includes('mobile.html')) {
-        // 这是手机端
-        mobileSocket = socket;
-    } else {
-        // 这是桌面端
-        desktopSocket = socket;
-        // 如果手机端已经连接，立即发送通知
-        if (mobileSocket) {
-            socket.emit('mobile-connected');
-        }
-    }
 });
 
 // 启动服务器

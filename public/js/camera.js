@@ -97,6 +97,11 @@ function initCamera() {
             // 更新UI状态
             document.getElementById('camera-status').textContent = '摄像头已就绪';
             document.getElementById('capture-photo').disabled = false;
+            
+            // 摄像头就绪后，通知服务器
+            if (socket && socket.connected) {
+                socket.emit('mobile-ready');
+            }
         })
         .catch(error => {
             console.error('摄像头访问错误:', error);
@@ -109,8 +114,10 @@ function initSocketConnection() {
     
     socket.on('connect', () => {
         console.log('已连接到服务器');
-        // 通知服务器手机端已连接
-        socket.emit('mobile-ready');
+        // 如果摄像头已经就绪，通知服务器
+        if (video && video.loadedmetadata) {
+            socket.emit('mobile-ready');
+        }
     });
     
     socket.on('game-start', data => {

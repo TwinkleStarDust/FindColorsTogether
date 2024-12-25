@@ -1,34 +1,64 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>大家一起找颜色（PC端）</title>
+    <title>颜色匹配游戏</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-    <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
-    <script src="js/fireworks.js"></script>
     <script src="js/sounds.js"></script>
+    <script src="js/fireworks.js"></script>
     <script src="js/game.js"></script>
 </head>
 <body>
-    <div class="game-container">
-        <h1>颜色捕捉游戏</h1>
-        <div class="target-color-container">
-            <span>目标颜色:</span>
-            <div id="target-color"></div>
+    <h1>大家一起找颜色</h1>
+    <div class="main-container">
+        <div class="game-container">
+            <div class="game-main">
+                <div class="game-content">
+                    <div id="game-status">等待手机端连接...</div>
+                    <div id="target-color-display">目标颜色：<span id="target-color"></span></div>
+                    <div class="game-info">
+                        <div id="timer">剩余时间: 15秒</div>
+                        <div id="score">得分: 0</div>
+                        <div id="current-score-display">当前得分：<span id="current-score">0</span></div>
+                    </div>
+                    <div id="camera-preview"></div>
+                </div>
+            </div>
+            <div class="controls">
+                <button id="start-game" disabled>开始游戏</button>
+                <button id="reset-game" disabled>重新开始</button>
+            </div>
         </div>
-        <div id="camera-feed"></div>
-        <div class="game-info">
-            <div id="timer">剩余时间: 15秒</div>
-            <div id="score">得分: 0</div>
+        
+        <div class="leaderboard-container">
+            <h2>游戏统计</h2>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-label">总分：</span>
+                    <span id="total-score">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">游戏次数：</span>
+                    <span id="game-count">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">平均分：</span>
+                    <span id="average-score">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">历史最高分：</span>
+                    <span id="highest-score">0</span>
+                </div>
+            </div>
+            
+            <h3>历史记录</h3>
+            <div id="score-history" class="score-list">
+                <!-- 历史记录将通过JavaScript动态添加 -->
+            </div>
         </div>
-        <div class="controls">
-            <button id="start-game">开始游戏</button>
-            <button id="reset-game">重新开始</button>
-        </div>
-        <div id="game-message"></div>
     </div>
 </body>
 </html> 
