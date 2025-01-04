@@ -6,6 +6,21 @@ let targetColor = null;
 let soundManager;
 
 function setup() {
+    navigator.getUserMedia = navigator.getUserMedia ||
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia ||
+        navigator.msGetUserMedia;
+
+    if (navigator.getUserMedia) {
+        navigator.getUserMedia({video: true,audio:true}, function onSuccess(stream) {
+            console.log('已点击允许,开启成功');
+        }, function onError(error) {
+            console.log("错误：", error);
+        });
+    } else {
+        console.log('不支持摄像头');
+    }
+
     // 创建画布并设置大小
     const container = document.getElementById('camera-preview');
     canvas = createCanvas(container.offsetWidth, container.offsetWidth * 9/16);
