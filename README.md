@@ -8,9 +8,7 @@
 - CSS3
 - JavaScript
 - P5.js - 用于图形处理和游戏界面
-- ML5.js - 用于图像处理和颜色识别
 - Socket.io - 用于实时通信
-- WebRTC - 用于摄像头流传输
 
 ## 使用方法
 
